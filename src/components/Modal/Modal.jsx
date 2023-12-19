@@ -5,13 +5,16 @@ const modalRoot = document.querySelector('#modal__root');
 
 const Modal = ({ src, alt, onClose }) => {
   useEffect(() => {
+    const handleKeyDown = e => {
+      if (e.code === 'Escape') {
+        onClose();
+      }
+    };
     window.addEventListener('keydown', handleKeyDown);
-  });
-  const handleKeyDown = e => {
-    if (e.code === 'Escape') {
-      return onClose();
-    }
-  };
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
 
   const handleDropClick = e => {
     if (e.currentTarget === e.target) {
