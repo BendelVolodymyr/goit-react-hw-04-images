@@ -4,21 +4,21 @@ import { getImages } from './SearchAPI/SearchAPI';
 import SearchBar from './SearchBar/SearchBar';
 import React, { useEffect, useState } from 'react';
 import Modal from './Modal/Modal';
-import Loader from './Loader/Loader';
+import { Images } from 'type/ImageGallery';
 
 export default function App() {
-  const [searchName, setSearchName] = useState('');
-  const [pages, setPages] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [images, setImages] = useState([]);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [modalSrc, setModalSrc] = useState('');
-  const [modalAlt, setModalAlt] = useState('');
+  const [searchName, setSearchName] = useState<string>('');
+  const [pages, setPages] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [images, setImages] = useState<Images[]>([]);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [isEmpty, setIsEmpty] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalSrc, setModalSrc] = useState<string>('');
+  const [modalAlt, setModalAlt] = useState<string>('');
 
   useEffect(() => {
-    const getSearch = async (search, page) => {
+    const getSearch = async (search: string, page: number) => {
       if (!search) return;
       setIsLoading(true);
 
@@ -40,7 +40,7 @@ export default function App() {
     getSearch(searchName, pages);
   }, [pages, searchName]);
 
-  const onHandleFormSubmit = search => {
+  const onHandleFormSubmit = (search: string) => {
     setPages(1);
     setImages([]);
     setIsEmpty(false);
@@ -51,23 +51,24 @@ export default function App() {
     setPages(pages + 1);
   };
 
-  const toggleModal = e => {
+  const toggleModal = (
+    e?: React.MouseEvent<HTMLImageElement | HTMLDivElement>
+  ) => {
     const control = e === undefined;
 
-    setShowModal(!showModal);
     if (!control) {
-      if (e.target.localName === 'img') {
-        setModalSrc(e.target.attributes.href.nodeValue);
-        setModalAlt(e.target.attributes.alt.nodeValue);
+      if (e.target instanceof HTMLImageElement) {
+        setModalSrc(e.target.getAttribute('data-href') || '');
+        setModalAlt(e.target.alt);
       }
     }
+    setShowModal(!showModal);
   };
 
   return (
     <>
-      <SearchBar onSubmit={onHandleFormSubmit} />
+      <SearchBar isLoading={isLoading} onSubmit={onHandleFormSubmit} />
       <ImageGallery images={images} onClick={toggleModal} />
-      {isLoading && <Loader isLoading={isLoading} />}
       {isVisible && <Button onClick={onHandleLoadMore} />}
       {showModal && (
         <Modal onClose={toggleModal} src={modalSrc} alt={modalAlt} />

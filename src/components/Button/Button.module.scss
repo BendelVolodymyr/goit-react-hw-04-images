@@ -1,0 +1,45 @@
+.load-more {
+  &__button {
+    display: block;
+    margin: 20px auto;
+    background-color: #3f51b5;
+    color: white;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(48, 63, 159, 0.3);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease,
+      transform 0.2s ease;
+    position: relative;
+    min-width: 140px;
+
+    &:hover:not(:disabled) {
+      background-color: #3646a4;
+      box-shadow: 0 6px 12px rgba(40, 53, 147, 0.5);
+      transform: translateY(-2px);
+    }
+
+    &:active:not(:disabled) {
+      background-color: #3646a4;
+      box-shadow: 0 3px 6px rgba(26, 35, 126, 0.6);
+      transform: translateY(0);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(48, 63, 159, 0.7);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  &__text {
+    font-weight: 600;
+  }
+}
